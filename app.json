@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "Uber Eats Clone",
+    "slug": "UberEatsClone",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo192.png",
+    "ios": {
+      "bundleIdentifier": "com.matthewraymond.Ubereatsclone",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.matthewraymond.Ubereatsclone",
+      "versionCode": 1
+    }
+  }
+}

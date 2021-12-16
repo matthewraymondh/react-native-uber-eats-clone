@@ -4,44 +4,6 @@ import { Divider } from "react-native-elements";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { useDispatch, useSelector } from "react-redux";
 
-const foods = [
-  {
-    title: "Lasagna",
-    description: "With butter lettuce, tomatto and sauce",
-    price: "$13.50",
-    image:
-      "https://piknikdong.com/wp-content/uploads/2020/07/Resep-Lasagna.jpg",
-  },
-  {
-    title: "Fetuchini Carbonara",
-    description: "With butter lettuce, tomatto and sauce",
-    price: "$15.50",
-    image:
-      "https://www.unileverfoodsolutions.co.id/dam/global-ufs/mcos/SEA/calcmenu/recipes/ID-recipes/pasta-dishes/carbonara-pasta/main-header.jpg",
-  },
-  {
-    title: "Wagyu Tenderloin Steak",
-    description: "With butter lettuce, tomatto and sauce",
-    price: "$22.50",
-    image:
-      "https://s1.bukalapak.com/img/66752451421/large/Jual_200Gr_Beef_Tenderloin_Steak_Daging_Sapi_Wagyu_Meltique_.jpg",
-  },
-  {
-    title: "Chicken Mozarella",
-    description: "With butter lettuce, tomatto and sauce",
-    price: "$18.20",
-    image:
-      "https://images.media-allrecipes.com/userphotos/8028733.jpg",
-  },
-  {
-    title: "Chicken Caesar Salad",
-    description: "With butter lettuce, tomatto and sauce",
-    price: "$8.50",
-    image:
-      "https://awsimages.detik.net.id/community/media/visual/2020/12/22/chicken-caesar-salad_43.jpeg?w=700&q=90",
-  },
-];
-
 const styles = StyleSheet.create({
   menuItemStyle: {
     flexDirection: "row",
@@ -55,7 +17,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function MenuItems({ restaurantName }) {
+export default function MenuItems({
+  restaurantName,
+  foods,
+  hideCheckbox,
+  marginLeft,
+}) {
   const dispatch = useDispatch();
   const selectItem = (item, checkboxValue) =>
     dispatch({
@@ -71,7 +38,7 @@ export default function MenuItems({ restaurantName }) {
     (state) => state.cartReducer.selectedItems.items
   );
 
-  const isFoodInCart = (food, cartItems) => 
+  const isFoodInCart = (food, cartItems) =>
     Boolean(cartItems.find((item) => item.title == food.title));
 
   return (
@@ -79,14 +46,18 @@ export default function MenuItems({ restaurantName }) {
       {foods.map((food, index) => (
         <View key={index}>
           <View style={styles.menuItemStyle}>
-            <BouncyCheckbox
-              iconStyle={{ borderColor: "lightgray", borderRadius: 0 }}
-              fillColor="green"
-              onPress={(checkboxValue) => selectItem(food, checkboxValue)}
-              isChecked={isFoodInCart(food, cartItems)}
-            />
+            {hideCheckbox ? (
+              <></>
+            ) : (
+              <BouncyCheckbox
+                iconStyle={{ borderColor: "lightgray", borderRadius: 0 }}
+                fillColor="green"
+                onPress={(checkboxValue) => selectItem(food, checkboxValue)}
+                isChecked={isFoodInCart(food, cartItems)}
+              />
+            )}
             <FoodInfo food={food} />
-            <FoodImage food={food} />
+            <FoodImage food={food} marginLeft={marginLeft ? marginLeft : 0} />
           </View>
           <Divider
             width={0.5}
@@ -112,11 +83,16 @@ const FoodInfo = (props) => (
   </View>
 );
 
-const FoodImage = (props) => (
+const FoodImage = ({ marginLeft, ...props }) => (
   <View>
     <Image
       source={{ uri: props.food.image }}
-      style={{ width: 100, height: 100, borderRadius: 8 }}
+      style={{
+        width: 100,
+        height: 100,
+        borderRadius: 8,
+        marginLeft: marginLeft,
+      }}
     />
   </View>
 );
